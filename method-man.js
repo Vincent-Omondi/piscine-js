@@ -1,29 +1,28 @@
 function split(str){
-    const words = str.split(' ')
-    return words
-};
+    return str.split(' ');
+}
 
 function sentence(arr){
-    const str = arr.join(' ')
-    return str
-};
+    return arr.join(' ');
+}
 
 function yell(str){
-    return str.toUpperCase()
-};
+    return str.toUpperCase();
+}
 
 function whisper(str){
-    return "*" + str.toLowerCase() + "*"
-};
+    return `*${str.toLowerCase()}*`;
+    // return "*" + str.toLowerCase() + "*";
+}
 
 function capitalize(str){
-   
-    return String(str[0].toUpperCase()) + String(str.slice(1))
-};
+    if (str.length === 0) return '';
+    return String(str[0].toUpperCase()) + String(str.slice(1).toLowerCase());
+}
 
 
-// console.log(split("Hello this is awesome"));
-// console.log('Hello', 'this', 'is', 'awesome');
-// console.log(yell("Hello this is awesome"));
-// console.log(whisper("Hello this is awesome"));
-// console.log(capitalize("hello"));
+console.log(split("Hello this is awesome"));
+console.log(sentence(["Hello", "world!"]));
+console.log(yell("Hello this is awesome"));
+console.log(whisper("Hello this is awesome"));
+console.log(capitalize("hello"));
