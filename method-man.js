@@ -12,7 +12,6 @@ function yell(str){
 
 function whisper(str){
     return `*${str.toLowerCase()}*`;
-    // return "*" + str.toLowerCase() + "*";
 }
 
 function capitalize(str){
@@ -21,8 +20,8 @@ function capitalize(str){
 }
 
 
-console.log(split("Hello this is awesome"));
-console.log(sentence(["Hello", "world!"]));
-console.log(yell("Hello this is awesome"));
-console.log(whisper("Hello this is awesome"));
-console.log(capitalize("hello"));
+// console.log(split("Hello this is awesome"));
+// console.log(sentence(["Hello", "world!"]));
+// console.log(yell("Hello this is awesome"));
+// console.log(whisper("Hello this is awesome"));
+// console.log(capitalize("hello"));
