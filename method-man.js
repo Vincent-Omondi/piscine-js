@@ -1,4 +1,4 @@
-function split(str){
+function words(str){
     return str.split(' ');
 }
 
@@ -20,7 +20,7 @@ function capitalize(str){
 }
 
 
-// console.log(split("Hello this is awesome"));
+// console.log(words("Hello this is awesome"));
 // console.log(sentence(["Hello", "world!"]));
 // console.log(yell("Hello this is awesome"));
 // console.log(whisper("Hello this is awesome"));
