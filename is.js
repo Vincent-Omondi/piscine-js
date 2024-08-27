@@ -1,38 +1,28 @@
-is = {
-    num: function(value){
-        return typeof value === 'number';
-    },
-    nan: function(value){
-        return Number.isNaN(value);
-    },
-    str: function(value){
-        return typeof value === 'string';
-    },
-    bool: function(value){
-        return  typeof value === 'boolean';
-    },
-    undef: function(value){
-        return typeof value === 'undefined';
-    },
-    def: function(value){
-        return typeof value !== 'undefined';
-    },
-    arr: function(value){
-        return Array.isArray(value);
-    },
-    obj: function(value){
-        return typeof value === 'object' && typeof value !== null;
-    },
-    fun: function(value){
-        return  typeof value === 'function';;
-    },
-    truthy: function(value){
-        return Boolean(value) === true;
-    },
-    falsy: function(value){
-        return Boolean(value) === false;
-    }
-}
+// const is = {}
+
+is.num = value => typeof value === 'number';
+
+is.nan = value => Number.isNaN(value);
+
+is.str = value => typeof value === 'string';
+
+is.bool = value => typeof value === 'boolean';
+
+is.undef = value => typeof value === 'undefined';
+
+is.def = value => typeof value !== 'undefined';
+
+is.arr = value => Array.isArray(value);
+
+is.obj = value => typeof value === 'object' && typeof value !== null;
+
+is.fun = value =>  typeof value === 'function';
+
+is.truthy = value => Boolean(value) === true;
+
+is.falsy = value => Boolean(value) === false;
+
+
 
 // console.log(is.num(5));       
 // console.log(is.num('ciao'));  
@@ -45,5 +35,6 @@ is = {
 // console.log(is.obj({}));      
 // console.log(is.fun(function() {}))
 // console.log(is.truthy('hello')); 
-// console.log(is.falsy(0));    
+// console.log(is.falsy(0));   
+
 
