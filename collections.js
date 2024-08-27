@@ -54,5 +54,11 @@ function superTypeOf(value){
     if (value instanceof Map) return 'Map';
     if (value instanceof Set) return 'Set';
     if (typeof (value) === 'object') return 'Object';
+    if (typeof (value) === 'string') return 'String';
+    if (typeof (value) === 'number') return 'Number';
+    if (typeof (value) === 'undefined') return 'undefined';
+    if (typeof (value) === 'function') return 'Function';
+    if (value === NaN) return 'Number';
     return typeof value;
 }
+
