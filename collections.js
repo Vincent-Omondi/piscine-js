@@ -53,6 +53,6 @@ function superTypeOf(value){
     if (Array.isArray(value)) return 'Array';
     if (value instanceof Map) return 'Map';
     if (value instanceof Set) return 'Set';
-    if (tyoeof (value) === 'object') return 'Object';
+    if (typeof (value) === 'object') return 'Object';
     return typeof value;
 }
