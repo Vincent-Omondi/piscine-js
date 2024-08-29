@@ -1,72 +1,51 @@
-function getIntPart(num) {
+function round(num) {
     if (num < 0) {
-      num = -num;
+        return -trunc(-num + 0.5); 
+    } else {
+        return trunc(num + 0.5); 
     }
+}
+
+function floor(num) {
+  
+    if (num < 0 && num !== trunc(num)) {
+        return trunc(num) - 1; 
+    }
+    return trunc(num); 
+}
+
+function trunc(num) {
+
+    if (num < 0) {
+        return -trunc(-num);
+    }
+
     let intPart = 0;
+    let multiplier = 1;
+
     while (num >= 1) {
-      intPart++;
-      num -= 1;
+        intPart += multiplier; 
+        num -= 1;
     }
+
     return intPart;
 }
-  
-function round(num) {
-    let intPart = getIntPart(num);
-    let fracPart = num - intPart;
-    if (num < 0) {
-      intPart = -intPart;
-      if (fracPart <= -0.5) {
-        return intPart - 1;
-      } else {
-        return intPart;
-      }
-    } else {
-      if (fracPart >= 0.5) {
-        return intPart + 1;
-      } else {
-        return intPart;
-      }
-    }
-}
-  
+
+
 function ceil(num) {
-    let intPart = getIntPart(num);
-    let fracPart = num - intPart;
     if (num < 0) {
-      intPart = -intPart;
-    }
-    if (fracPart > 0) {
-      return intPart + 1;
+        return trunc(num); 
     } else {
-      return intPart;
+        if (num !== trunc(num)) {
+            return trunc(num) + 1; 
+        }
     }
+    return trunc(num);
 }
-  
-function floor(num) {
-    let intPart = getIntPart(num);
-    let fracPart = num - intPart;
-    if (num < 0) {
-      intPart = -intPart;
-    }
-    if (fracPart < 0) {
-      return intPart - 1;
-    } else {
-      return intPart;
-    }
-}
-  
-function trunc(num) {
-    let intPart = getIntPart(num);
-    if (num < 0) {
-      return -intPart;
-    } else {
-      return intPart;
-    }
-}
-  
 
 // const nums = [3.7, -3.7, 3.1, -3.1];
-// console.log(nums.map(round));
-// console.log(nums.map(floor));
-// console.log(nums.map(trunc));
-// console.log(nums.map(ceil));
+
+// console.log(nums.map(round)); // [ 4, -4, 3, -3 ]
+// console.log(nums.map(floor)); // [ 3, -4, 3, -4 ]
+// console.log(nums.map(trunc)); // [ 3, -3, 3, -3 ]
+// console.log(nums.map(ceil));  // [ 4, -3, 4, -3 ]
