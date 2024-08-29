@@ -1,51 +1,69 @@
-function round(x) {
-    if (x >= 0) {
-        let floor = getFloor(x);
-        return x >= floor + 0.5 ? floor + 1 : floor;
+function getIntPart(num) {
+    if (num < 0) {
+      num = -num;
+    }
+    let intPart = 0;
+    while (num >= 1) {
+      intPart++;
+      num -= 1;
+    }
+    return intPart;
+}
+  
+function round(num) {
+    let intPart = getIntPart(num);
+    let fracPart = num - intPart;
+    if (num < 0) {
+      intPart = -intPart;
+      if (fracPart <= -0.5) {
+        return intPart - 1;
+      } else {
+        return intPart;
+      }
     } else {
-        let floor = getFloor(x);
-        return x <= floor - 0.5 ? floor - 1 : floor;
+      if (fracPart >= 0.5) {
+        return intPart + 1;
+      } else {
+        return intPart;
+      }
     }
 }
-
-function ceil(x) {
-    let floor = getFloor(x);
-    if (x >= 0) {
-        return floor === x ? floor : floor + 1;
+  
+function ceil(num) {
+    let intPart = getIntPart(num);
+    let fracPart = num - intPart;
+    if (num < 0) {
+      intPart = -intPart;
+    }
+    if (fracPart > 0) {
+      return intPart + 1;
     } else {
-        return floor;
+      return intPart;
     }
 }
-
-
-function floor(x) {
-    let floor = getFloor(x);
-    if (x >= 0) {
-        return floor;
+  
+function floor(num) {
+    let intPart = getIntPart(num);
+    let fracPart = num - intPart;
+    if (num < 0) {
+      intPart = -intPart;
+    }
+    if (fracPart < 0) {
+      return intPart - 1;
     } else {
-        return floor === x ? floor : floor - 1;
+      return intPart;
     }
 }
-
-function trunc(x) {
-    return getFloor(x);
-}
-
-function getFloor(x) {
-    let floor = 0;
-    if (x >= 0) {
-        while (floor <= x) {
-            if (floor + 1 > x) break;
-            floor++;
-        }
+  
+function trunc(num) {
+    let intPart = getIntPart(num);
+    if (num < 0) {
+      return -intPart;
     } else {
-        while (floor >= x) {
-            if (floor - 1 < x) break;
-            floor--;
-        }
+      return intPart;
     }
-    return floor;
 }
+  
 
 // const nums = [3.7, -3.7, 3.1, -3.1];
 // console.log(nums.map(round));
