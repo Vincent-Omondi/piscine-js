@@ -1,4 +1,4 @@
-function slice(input, start=0, end = input.length -1){
+function slice(input, start=0, end = input.length){
     if (start < 0) start = input.length + start;
     if (end < 0) end = input.length + end;
     if (Array.isArray(input)){
@@ -23,4 +23,5 @@ function slice(input, start=0, end = input.length -1){
 // console.log(slice(str,0,5));
 // console.log(slice(fruits,-2));
 // console.log(slice(str,-2));
-console.log(slice('abcdef', 0, 2)) //() => slice('abcdef', 0, 2) === 'ab'
+// console.log(slice('abcdef', 0, 2)) //() => slice('abcdef', 0, 2) === 'ab'
+// console.log(slice('abcdef', 2)) //slice('abcdef', 2) === 'cdef'
