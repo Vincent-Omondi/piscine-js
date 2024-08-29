@@ -19,6 +19,9 @@ function keepLast(str){
 }
 
 function keepFirstLast(str){
+    if (str.length === 2 || str.length === 3){
+        return str;
+    }
     return str.slice(0, 2) + str.slice(-2);
 }
 
@@ -28,5 +31,4 @@ function keepFirstLast(str){
 // console.log(keepFirst('awesome'))
 // console.log(keepLast('awesome'))
 // console.log(keepFirstLast('awesome'))
-
 
