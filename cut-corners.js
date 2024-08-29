@@ -1,29 +1,54 @@
-function round(num) {
-    const decimal = num - parseInt(num);
-    if (num >= 0) {
-        return decimal >= 0.5 ? parseInt(num) + 1 : parseInt(num);
+function round(x) {
+    if (x >= 0) {
+        let floor = getFloor(x);
+        return x >= floor + 0.5 ? floor + 1 : floor;
     } else {
-        return decimal <= -0.5 ? parseInt(num) - 1 : parseInt(num);
+        let floor = getFloor(x);
+        return x <= floor - 0.5 ? floor - 1 : floor;
     }
 }
 
-function ceil(num) {
-    const decimal = num - parseInt(num);
-    return decimal > 0 ? parseInt(num) + 1 : parseInt(num);
-}
-
-function floor(num) {
-    const decimal = num - parseInt(num);
-    return decimal < 0 ? parseInt(num) - 1 : parseInt(num);
-}
-
-function trunc(num) {
-    return num >= 0 ? parseInt(num) : -parseInt(-num);
+function ceil(x) {
+    let floor = getFloor(x);
+    if (x >= 0) {
+        return floor === x ? floor : floor + 1;
+    } else {
+        return floor;
+    }
 }
 
 
-// const nums = [3.7, -3.7, 3.1, -3.1];
-// console.log(nums.map(round));  
-// console.log(nums.map(floor)); 
-// console.log(nums.map(trunc));  
-// console.log(nums.map(ceil));   
+function floor(x) {
+    let floor = getFloor(x);
+    if (x >= 0) {
+        return floor;
+    } else {
+        return floor === x ? floor : floor - 1;
+    }
+}
+
+function trunc(x) {
+    return getFloor(x);
+}
+
+function getFloor(x) {
+    let floor = 0;
+    if (x >= 0) {
+        while (floor <= x) {
+            if (floor + 1 > x) break;
+            floor++;
+        }
+    } else {
+        while (floor >= x) {
+            if (floor - 1 < x) break;
+            floor--;
+        }
+    }
+    return floor;
+}
+
+const nums = [3.7, -3.7, 3.1, -3.1];
+console.log(nums.map(round));
+console.log(nums.map(floor));
+console.log(nums.map(trunc));
+console.log(nums.map(ceil));
