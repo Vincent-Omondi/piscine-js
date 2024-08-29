@@ -15,21 +15,20 @@ function floor(num) {
 }
 
 function trunc(num) {
-
     if (num < 0) {
-        return -trunc(-num);
+        return -trunc(-num); 
     }
 
     let intPart = 0;
-    let multiplier = 1;
 
     while (num >= 1) {
-        intPart += multiplier; 
-        num -= 1;
+        intPart++; 
+        num -= 1;  
     }
 
-    return intPart;
+    return intPart; 
 }
+
 
 
 function ceil(num) {
