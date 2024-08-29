@@ -20,8 +20,8 @@ function includes(arr, value){
     return indexOf(arr, value) !== -1;
 }
 
-const arr = [1, 2, 3, 4, 2,0,9, 5];
+// const arr = [1, 2, 3, 4, 2,0,9, 5];
 
-console.log(indexOf(arr, 2, fromIndex = 0))
-console.log(lastIndefOf(arr, 2))
-console.log(includes(arr, 9))
+// console.log(indexOf(arr, 2, fromIndex = 0))
+// console.log(lastIndefOf(arr, 2))
+// console.log(includes(arr, 9))
