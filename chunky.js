@@ -16,5 +16,5 @@ function chunk(arr, size){
     return result
 }
 
-const array = [1, 2, 3, 4, 5, 6, 7, 8, 9,7];
-console.log(chunk(array, 0)); 
+// const array = [1, 2, 3, 4, 5, 6, 7, 8, 9,7];
+// console.log(chunk(array, 0)); 
