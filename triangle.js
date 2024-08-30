@@ -8,10 +8,15 @@ function triangle(character, height) {
             line += character;
         }
         
-        result += line + '\n';
+        result += line;
+
+        if (i < height) {
+            result += '\n';
+        }
     }
 
     return result;
 }
-// console.log(triangle('*', 5));
+
+// console.log(triangle('#', 4));
 
