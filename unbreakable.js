@@ -1,7 +1,7 @@
 function split(str, del = ''){
     let result = [];
     let word = '';
-    for (let i = 0; i <= str.length - 1; i++){
+    for (let i = 0; i < str.length; i++){
         
         if (str[i] !== del){
             word += str[i]
@@ -28,12 +28,12 @@ function join(str, del =','){
 
 
 
-// const str = 'The quick brown fox jumps over the lazy dog.';
+const str = 'The quick brown fox jumps over the lazy dog.';
 
 
-// const words = str.split(' ');
-// console.log(words);
+const words = str.split(' ');
+console.log(words);
 
-// const elements = ['Fire', 'Air', 'Water'];
+const elements = ['Fire', 'Air', 'Water'];
 
-// console.log(elements.join());
+console.log(elements.join());
