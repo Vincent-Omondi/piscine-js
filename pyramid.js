@@ -4,7 +4,7 @@ function pyramid(character, depth) {
     for (let i = 1; i <= depth; i++) {
         let line = '';
 
-        const numSpaces = depth - i;
+        const numSpaces = (depth - i) * character.length;
         const numChars = 2 * i - 1;
 
         for (let j = 0; j < numSpaces; j++) {
@@ -25,5 +25,4 @@ function pyramid(character, depth) {
     return result;
 }
 
-// console.log(pyramid('*', 5));
-
+console.log(pyramid('{}', 12));
