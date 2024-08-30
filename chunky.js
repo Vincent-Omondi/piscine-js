@@ -8,7 +8,7 @@ function chunk(arr, size){
 
         const  chunk = [];
 
-        for (j = i; j< end; j++){
+        for (let j = i; j< end; j++){
             chunk.push(arr[j])
         }
         result.push(chunk);
