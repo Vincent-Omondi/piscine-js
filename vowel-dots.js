@@ -5,4 +5,4 @@ function vowelDots(str){
 }
 
 // console.log(vowelDots('example'));
-console.log(vowelDots('Algorithm'))
+// console.log(vowelDots('Algorithm'))
