@@ -13,7 +13,7 @@ function notSoGreedy(dataSet) {
     return dataSet.match(notSoGreedyRegex) || [];
 }
 
-const dataSet = 'qqq http:// qqqq q qqqqq https://something.com/hello qqqqqqq qhttp://example.com/hello?you=something&something=you';
-console.log(getURL(dataSet));
-console.log(greedyQuery(dataSet));
-console.log(notSoGreedy(dataSet));
+// const dataSet = 'qqq http:// qqqq q qqqqq https://something.com/hello qqqqqqq qhttp://example.com/hello?you=something&something=you';
+// console.log(getURL(dataSet));
+// console.log(greedyQuery(dataSet));
+// console.log(notSoGreedy(dataSet));
