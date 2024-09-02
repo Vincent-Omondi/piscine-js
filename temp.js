@@ -1,120 +1,161 @@
-function crosswordSolver(emptyPuzzle, words) {
-    // Input validation
-    if (typeof emptyPuzzle !== 'string' || !/^[0-9.\n]+$/.test(emptyPuzzle)) {
-        console.log('Error');
+function permutate(arr, cross) {
+    if (stop) return;
+
+    if (arr.length == 0) {
+        if (print == 'Error') {
+            print = cross.map(array => array.join('')).join('\n');
+        } else {
+            stop = true;
+            print = 'Error';
+        }
         return;
     }
 
-    if (!Array.isArray(words) || words.length === 0 || new Set(words).size !== words.length) {
-        console.log('Error');
-        return;
-    }
+    let level = initiallength - arr.length;
 
-    const grid = emptyPuzzle.split('\n').map(row => row.split(''));
-    const height = grid.length;
-    const width = grid[0].length;
+    for (let i = 0; i < arr.length; i++) {
+        let copy = copyArr(arr);
+        let parent = copy.splice(i, 1);
+        let crosswordCopy = copyArr(cross);
 
-    const wordStarts = [];
-    for (let i = 0; i < height; i++) {
-        for (let j = 0; j < width; j++) {
-            if (grid[i][j] !== '.' && grid[i][j] !== '0') {
-                const num = parseInt(grid[i][j]);
-                if (num > 2) {
-                    console.log('Error');
-                    return;
-                }
-                const acrossLength = getWordLength(i, j, 0, 1);
-                const downLength = getWordLength(i, j, 1, 0);
-                if (acrossLength > 1) {
-                    wordStarts.push({x: j, y: i, direction: 'across', length: acrossLength});
-                }
-                if (downLength > 1) {
-                    wordStarts.push({x: j, y: i, direction: 'down', length: downLength});
-                }
-            }
-        }
-    }
-
-    if (wordStarts.length !== words.length) {
-        console.log('Error');
-        return;
-    }
-
-    const maxLength = Math.max(...wordStarts.map(start => start.length));
-    if (words.some(word => word.length > maxLength)) {
-        console.log('Error');
-        return;
-    }
-
-    if (solvePuzzle(0)) {
-        console.log(grid.map(row => row.join('')).join('\n'));
-    } else {
-        console.log('Error');
-    }
-
-    function getWordLength(y, x, dy, dx) {
-        let length = 0;
-        while (y < height && x < width && grid[y][x] !== '.') {
-            length++;
-            y += dy;
-            x += dx;
-        }
-        return length;
-    }
-
-    function solvePuzzle(index) {
-        if (index === words.length) {
-            return true;
-        }
-
-        const start = wordStarts[index];
-        for (let word of words) {
-            if (word.length === start.length && canPlaceWord(word, start)) {
-                placeWord(word, start);
-                if (solvePuzzle(index + 1)) {
-                    return true;
-                }
-                removeWord(start);
-            }
-        }
-
-        return false;
-    }
-
-    function canPlaceWord(word, start) {
-        let {x, y} = start;
-        const {direction} = start;
-        for (let i = 0; i < word.length; i++) {
-            if (grid[y][x] !== '.' && grid[y][x] !== word[i] && !/[0-9]/.test(grid[y][x])) {
-                return false;
-            }
-            direction === 'across' ? x++ : y++;
-        }
-        return true;
-    }
-
-    function placeWord(word, start) {
-        let {x, y} = start;
-        const {direction} = start;
-        for (let i = 0; i < word.length; i++) {
-            grid[y][x] = word[i];
-            direction === 'across' ? x++ : y++;
-        }
-    }
-
-    function removeWord(start) {
-        let {x, y} = start;
-        const {direction, length} = start;
-        for (let i = 0; i < length; i++) {
-            grid[y][x] = /[0-9]/.test(grid[y][x]) ? grid[y][x] : '.';
-            direction === 'across' ? x++ : y++;
+        if (isMatching(level, parent[0], crosswordCopy)) {
+            var result = placeWord(level, parent[0], crosswordCopy);
+            permutate(copy, result);
         }
     }
 }
 
+function isMatching(index, word, arr) {
+    const localIndices = indesies[index];
 
-// Test the function
-const puzzle = '2001\n0..0\n1000\n0..0';
-const words = ['casa', 'alan', 'ciao', 'anta'];
+    if (word.length !== localIndices.length) return false;
 
-crosswordSolver(puzzle, words);
+    for (let i = 0; i < localIndices.length; i++) {
+        const { row, col } = localIndices[i];
+        const chInCrossword = arr[row][col];
+
+        if (chInCrossword === '') continue;
+        if (chInCrossword !== word[i]) return false;
+    }
+
+    return true;
+}
+
+function placeWord(index, word, crossword) {
+    const localIndices = indesies[index];
+    
+    for (let i = 0; i < localIndices.length; i++) {
+        const { row, col } = localIndices[i];
+        crossword[row][col] = word[i];
+    }
+  
+    return crossword;
+}
+
+const createCrossword = (str) => {
+    str = str.trim();
+    if (str == '') return 'Error';
+
+    let result = [];
+    let rows = str.split('\n');
+    for (let row of rows) {
+        let colF = row.split('').map(ch => (ch == '0' || ch == '1') ? '' : (ch == '.' || ch == '2') ? ch : null);
+        if (colF.includes(null)) return 'Error';
+        result.push(colF);
+    }
+
+    for (let row = 0; row < result.length; row++) {
+        for (let col = 0; col < result[row].length; col++) {
+            if (result[row][col] == '2') {
+                if ((col == 0 || result[row][col - 1] == '.') &&
+                    (row == 0 || result[row - 1][col] == '.') &&
+                    col + 1 < result[0].length &&
+                    result[row][col + 1] != '.' &&
+                    row + 1 < result.length &&
+                    result[row + 1][col] != '.') {
+                    result[row][col] = '';
+                } else {
+                    return "Error";
+                }
+            }
+        }
+    }
+    return result;
+}
+
+const createIndecies = (arr) => {
+    let result = [];
+
+    // Horizontal
+    for (let row = 0; row < arr.length; row++) {
+        let ind = [];
+        for (let col = 0; col < arr[row].length; col++) {
+            if (arr[row][col] == '') {
+                ind.push({ row, col });
+            } else if (ind.length > 1) {
+                result.push([...ind]);
+                ind = [];
+            } else {
+                ind = [];
+            }
+        }
+        if (ind.length > 1) result.push([...ind]);
+    }
+
+    // Vertical
+    for (let col = 0; col < arr[0].length; col++) {
+        let ind = [];
+        for (let row = 0; row < arr.length; row++) {
+            if (arr[row][col] == '') {
+                ind.push({ row, col });
+            } else if (ind.length > 1) {
+                result.push([...ind]);
+                ind = [];
+            } else {
+                ind = [];
+            }
+        }
+        if (ind.length > 1) result.push([...ind]);
+    }
+
+    return result;
+}
+
+const crosswordSolver = (puzzle, words) => {
+    if (typeof puzzle != "string" || !Array.isArray(words) || words.some(word => typeof word != "string")) {
+        console.log("Error");
+        return;
+    }
+
+    initiallength = words.length;
+    let crossword = createCrossword(puzzle);
+    if (crossword === 'Error') {
+        console.log("Error");
+        return;
+    }
+    indesies = createIndecies(crossword);
+    permutate(words, crossword)
+    console.log(print);
+}
+
+let stop = false;
+let initiallength;
+let indesies;
+var print = "Error";
+
+const copyArr = (arr) => JSON.parse(JSON.stringify(arr));
+
+module.exports = {
+    crosswordSolver,
+    createCrossword,
+    createIndecies,
+    isMatching,
+    placeWord,
+    permutate,
+    copyArr
+};
+
+const puzzle = '2001\n0..0\n1000\n0..0'
+const words = ['aaab', 'aaac', 'aaad', 'aaae']
+
+crosswordSolver(puzzle, words)
