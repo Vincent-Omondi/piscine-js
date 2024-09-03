@@ -6,10 +6,6 @@ function isValid(dateStr){
     if (typeof dateStr === 'number') {
         return !isNaN(new Date(dateStr).getTime());
     }
-
-    if (typeof dateStr === 'string') {
-        return !isNaN(new Date(dateStr).getTime());
-    }
     return false;
 }
 
