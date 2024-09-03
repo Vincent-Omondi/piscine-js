@@ -1,11 +1,26 @@
 function dayOfTheYear(date) {
-    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-    const daysSinceFirstDay = Math.floor((date.getTime() - firstDayOfYear.getTime()) / (1000 * 60 * 60 * 24));
-    return daysSinceFirstDay + 1;
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+
+    const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+    if (isLeapYear(year)) {
+        daysInMonth[1] = 29;
+    }
+
+    let dayOfYear = 0;
+    for (let i = 0; i < month; i++) {
+        dayOfYear += daysInMonth[i];
+    }
+    dayOfYear += day;
+
+    return dayOfYear;
 }
 
-// console.log(dayOfTheYear(new Date('2024-01-01'))); // 1
-// console.log(dayOfTheYear(new Date('2024-02-29'))); // 60
-// console.log(dayOfTheYear(new Date('2024-12-31'))); // 366
-// console.log(dayOfTheYear(new Date('2023-01-01'))); // 1
-// console.log(dayOfTheYear(new Date('2023-12-31'))); // 365
+function isLeapYear(year) {
+    return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+}
+
+// console.log(dayOfTheYear(new Date('0001-01-01'))); // 1
+// console.log(dayOfTheYear(new Date('2024-09-03'))); // 247
