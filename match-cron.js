@@ -17,7 +17,7 @@ function matchCron(cronString, date){
         return false;
     }
     
-    if (dayOfWeek !== '*' && parseInt(dayOfWeek) !== date.getDay() + 1) {
+    if (dayOfWeek !== '*' && parseInt(dayOfWeek) !== date.getDay()) {
         return false;
     }
     
@@ -27,3 +27,4 @@ function matchCron(cronString, date){
 // console.log(matchCron('9 * * * *', new Date('2020-05-30 18:09:00'))); // true
 // console.log(matchCron('9 * * * *', new Date('2020-05-30 19:09:00'))); // true
 // console.log(matchCron('9 * * * *', new Date('2020-05-30 19:21:00'))); // false
+console.log(matchCron('* * * * 1', new Date('2020-06-01 00:00:00'))); // true
