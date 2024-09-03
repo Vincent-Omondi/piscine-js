@@ -1,6 +1,18 @@
 function isValid(dateStr){
-    return dateStr instanceof Date && !isNaN(dateStr);
+    if (dateStr instanceof Date){
+        return !isNaN(dateStr.getTime());
+    } 
+
+    if (typeof dateStr === 'number') {
+        return !isNaN(new Date(dateStr).getTime());
+    }
+
+    if (typeof dateStr === 'string') {
+        return !isNaN(new Date(dateStr).getTime());
+    }
+    return false;
 }
+
 
 function isAfter(currentDate, inputDate){
    if (!isValid(currentDate) || !isValid(inputDate)) return false;
@@ -25,4 +37,6 @@ function isPast(date){
 // console.log(isAfter("9/9/2024", "6/7/2024"))
 // console.log(isBefore("9/9/2024", "6/7/2024"))
 // console.log(isPast("09/02/2024"))
+
+// console.log(isValid(Date.now()))
 
