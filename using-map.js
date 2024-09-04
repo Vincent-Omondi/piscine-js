@@ -35,7 +35,7 @@ function tempForecasts(arrObj){
                 .join(' ')
                 ;
 
-        return `${celsius}°Celsius in ${str.city},${capitalizedcity}`
+        return `${celsius}°Celsius in ${str.city}, ${capitalizedcity}`
     });
 }
 
