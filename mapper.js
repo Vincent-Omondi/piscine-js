@@ -8,14 +8,15 @@ const map = (arr, fn) => {
 };
 
 const flatMap = (arr, fn) => {
-    // return map(arr, fn).reduce((acc, val) => acc.concat(val), []);
     const result = [];
-    for (let i = 0; i < arr.length; i++){
-        const val = fn(arr[i]);
-        if(Array.isArray(val)){
+    for (let i = 0; i < arr.length; i++) {
+        const val = fn(arr[i], i, arr);
+        if (Array.isArray(val)) {
             result.push(...val);
-        } else if (val !== undefined){
+        } else if (val !== undefined) {
             result.push(val);
+        } else {
+            result.push(undefined);
         }
     }
     return result;
