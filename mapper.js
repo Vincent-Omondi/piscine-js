@@ -2,9 +2,7 @@ const map = (arr, fn) => {
     const result = [];
     for (let i = 0; i < arr.length; i++){
         const val = fn(arr[i], i, arr);
-        if (val !== undefined) {
-            result.push(val);
-        }
+        result.push(val);
     }
     return result;
 };
@@ -16,7 +14,7 @@ const flatMap = (arr, fn) => {
         const val = fn(arr[i]);
         if(Array.isArray(val)){
             result.push(...val);
-        } else {
+        } else if (val !== undefined){
             result.push(val);
         }
     }
