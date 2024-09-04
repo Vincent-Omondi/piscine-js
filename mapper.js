@@ -19,5 +19,5 @@ const flatMap = (arr, fn) => {
     }
     return result;
 };
-console.log(flatMap([1, 2, 3], x => [x, x * 2]));
-console.log(map([1, 2, 3], x => x * 2));
+// console.log(flatMap([1, 2, 3], x => [x, x * 2]));
+// console.log(map([1, 2, 3], x => x * 2));
