@@ -3,8 +3,12 @@ function citiesOnly(cities){
 }
 
 function upperCasingStates(arrStr){
-    return arrStr.map(str => str.charAt(0).toUpperCase()
-        + str.slice(1));
+    return arrStr.map(str => 
+        str
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ')
+        );
 }
 
 function fahrenheitToCelsius(arrF){
@@ -23,7 +27,13 @@ function tempForecasts(arrObj){
     return  arrObj.map(str => {
         const fahrenheit = parseFloat(str.temperature);
         const celsius = Math.floor((fahrenheit - 32)*5/9);
-        return `${celsius}°Celsius in ${str.city}, ${str.state.charAt(0).toUpperCase() + str.state.slice(1)}`
+        const capitalizedcity = str.state
+                .split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ')
+                ;
+
+        return `${celsius}°Celsius in ${str.city},${capitalizedcity}`
     });
 }
 
@@ -55,7 +65,11 @@ function tempForecasts(arrObj){
 //     {
 //       city: 'Pasadena',
 //       temperature: ' 101 °F',
-//       state: 'california',
+//       state: 'new york',
 //       region: 'West',
 //     },
 // ]));
+
+// const states = ['alabama', 'new jersey', 'alaska', 'new york', 'california', 'new hampshire', 'ohio', 'texas', 'west virginia'];
+// const capitalizedStates = upperCasingStates(states);
+// console.log(capitalizedStates);
