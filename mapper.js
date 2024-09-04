@@ -1,7 +1,10 @@
 const map = (arr, fn) => {
     const result = [];
     for (let i = 0; i < arr.length; i++){
-        result.push(fn(arr[i]));
+        const val = fn(arr[i]);
+        if (val !== undefined) {
+            result.push(val);
+        }
     }
     return result;
 };
