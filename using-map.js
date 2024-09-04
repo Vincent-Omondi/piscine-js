@@ -19,6 +19,8 @@ function fahrenheitToCelsius(arrF){
 function trimTemp(arrObj){
     return arrObj.map(obj => ({
         city: obj.city,
+        state: obj.state,
+        region: obj.region,
         temperature: obj.temperature.trim().split(' ').join('')
     }));
 }
@@ -56,10 +58,10 @@ function tempForecasts(arrObj){
 
 // console.log(fahrenheitToCelsius(['68°F', '59°F', '25°F']))
 
-console.log(trimTemp([
-    { city: 'Los Angeles', temperature: '  101 °F   ' },
-    { city: 'San Francisco', temperature: ' 84 ° F   ' },
-]));
+// console.log(trimTemp([
+//     { city: 'Los Angeles', temperature: '  101 °F   ' },
+//     { city: 'San Francisco', temperature: ' 84 ° F   ' },
+// ]));
 
 // console.log(tempForecasts([
 //     {
