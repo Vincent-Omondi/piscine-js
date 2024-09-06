@@ -5,7 +5,7 @@ export const build = (numberOfBricks) => {
         const brick = document.createElement('div');
         brick.id = `brick-${brickCount}`;
         document.body.appendChild(brick)
-        brick.dataset.foundation = brickCount % 3 === 2 ? 'true' : 'undefined';
+        brick.dataset.foundation = brickCount % 3 === 2 ? 'true' : undefined;
         (brickCount >= numberOfBricks) && clearInterval(interval);
     }, 100);
 };
