@@ -12,7 +12,7 @@ export const build = (numberOfBricks) => {
             brick.dataset.foundation = 'false';
         }
 
-        if (brickCount === numberOfBricks) {
+        if (brickCount >= numberOfBricks) {
             clearInterval(interval);
         }
     }, 100);
