@@ -17,14 +17,15 @@ export const repair = (...ids) => {
     ids.forEach(id => {
         const brick = document.getElementById(id);
         if (brick){
-            brick && (brick.dataset.repaired === brick.dataset.foundation === 'true' ? 'inprogress' : 'true' );
+            brick.dataset.repaired === brick.dataset.foundation === 'true' ? 'inprogress' : 'true';
         }
+
     });
 }
 
 export const destroy = () => {
     const bricks = document.querySelectorAll('div[id^="brick-"]');
     if (bricks.length){
-        bricks.length && bricks[bricks.length - 1].remove();
+        bricks[bricks.length - 1].remove();
     }
 };
