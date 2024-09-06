@@ -5,10 +5,15 @@ export const build = (numberOfBricks) => {
         const brick = document.createElement('div');
         brick.id = `brick-${brickCount}`;
         document.body.appendChild(brick)
-        brick.dataset.foundation = brickCount % 3 === 2 ? 'true' : undefined;
-        (brickCount >= numberOfBricks) && clearInterval(interval);
-        if (brickCount >= numberOfBricks) {
-            clearInterval(interval)
+   
+        if (brickCount % 3 === 2) {
+            brick.dataset.foundation = 'true';
+        } else {
+            brick.dataset.foundation = 'false';
+        }
+
+        if (brickCount === numberOfBricks) {
+            clearInterval(interval);
         }
     }, 100);
 };
@@ -17,7 +22,11 @@ export const repair = (...ids) => {
     ids.forEach(id => {
         const brick = document.getElementById(id);
         if (brick){
-            brick.dataset.repaired === brick.dataset.foundation === 'true' ? 'inprogress' : 'true';
+            if (brick.dataset.foundation === 'true') {
+                brick.dataset.repaired = 'inprogress';
+            } else {
+                brick.dataset.repaired = 'true';
+            }
         }
 
     });
