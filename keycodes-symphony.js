@@ -11,10 +11,10 @@ export const compose = () => {
             if (notes.length > 0) {
                 notes[notes.length - 1].remove()
             }
-        } else {
+        } else if (key >= 'a' && key <= 'z') {
             let note = document.createElement("div")
             note.classList.add("note")
-            let color = "#" + "99" + event.key + event.key
+            let color = `hsl(${(key.charCodeAt(0) - 97) * 13}, 100%, 50%)`;
             note.style.background = color
             document.body.appendChild(note)
             note.innerHTML = key
