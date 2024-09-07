@@ -1,76 +1,78 @@
 import { places } from './where-do-we-go.data.js';
 
-export const renderExploration = () => {
-    const sortedDestinations = sortDestinations()
-    const bodyElement = document.body
+export const explore = () => {
+    const rankedLocations = organizeLocations()
+    const mainContainer = document.body
 
-    sortedDestinations.forEach(destination => {
-        const destinationSection = createDestinationSection(destination)
-        bodyElement.appendChild(destinationSection)
+    rankedLocations.forEach(location => {
+        const locationElement = document.createElement('section')
+        const cityName = extractCityName(location.name)
+        locationElement.style.background = `url('./where-do-we-go_images/${cityName}.jpg')`
+        mainContainer.appendChild(locationElement)
     })
 
-    const currentLocationIndicator = createLocationIndicator(sortedDestinations[0])
-    bodyElement.appendChild(currentLocationIndicator)
+    const positionDisplay = createPositionDisplay(rankedLocations[0])
+    mainContainer.appendChild(positionDisplay)
 
-    const compassElement = createCompass()
-    bodyElement.appendChild(compassElement)
+    const directionIndicator = createDirectionIndicator()
+    mainContainer.appendChild(directionIndicator)
+
     let previousScrollPosition = 0
-    let currentScrollPosition = 0
 
     document.addEventListener("scroll", () => {
-        currentScrollPosition = window.scrollY;
-        updateCompassDirection(compassElement, previousScrollPosition, currentScrollPosition)
-        const currentDestinationIndex = Math.round(window.scrollY / window.innerHeight)
-        updateLocationIndicator(currentLocationIndicator, sortedDestinations[currentDestinationIndex])
-        previousScrollPosition = window.scrollY;
+        const currentScrollPosition = window.scrollY
+        updateDirectionIndicator(directionIndicator, currentScrollPosition, previousScrollPosition)
+        
+        const currentIndex = calculateCurrentIndex()
+        updatePositionDisplay(positionDisplay, rankedLocations[currentIndex])
+        
+        previousScrollPosition = currentScrollPosition
     })
 }
 
-const sortDestinations = () => {
-    const northboundDestinations = places.filter(destination => destination.coordinates.includes("N"))
-    const southboundDestinations = places.filter(destination => destination.coordinates.includes("S"))
-    northboundDestinations.sort((a, b) => compareCoordinates(a, b, "N"))
-    southboundDestinations.sort((a, b) => compareCoordinates(a, b, "S"))
-    return northboundDestinations.concat(southboundDestinations)
-}
-
-const createDestinationSection = (destination) => {
-    const sectionElement = document.createElement('section')
-    const cityName = destination.name.split(',')[0].toLowerCase().replaceAll(' ', '-')
-    sectionElement.style.background = `url('./where-do-we-go_images/${cityName}.jpg')`
-    return sectionElement
-}
-
-const createLocationIndicator = (destination) => {
-    const locationIndicatorElement = document.createElement('a')
-    locationIndicatorElement.classList.add('location')
-    locationIndicatorElement.textContent = `${destination.name}\n${destination.coordinates}`
-    locationIndicatorElement.href = `https://www.google.com/maps/place/${destination.coordinates}`
-    locationIndicatorElement.style.color = destination.color
-    return locationIndicatorElement
-}
-
-const createCompass = () => {
-    const compassElement = document.createElement('div')
-    compassElement.classList.add('direction')
-    return compassElement
-}
-
-const compareCoordinates = (a, b, hemisphere) => {
-    if (hemisphere === "N") {
-        return a.coordinates > b.coordinates ? -1 : 1
-    } else {
-        return b.coordinates > a.coordinates ? -1 : 1
+const organizeLocations = () => {
+    const northernLocations = places.filter(place => place.coordinates.includes("N"))
+    const southernLocations = places.filter(place => place.coordinates.includes("S"))
+    
+    const sortByCoordinates = (a, b) => {
+        if (a.coordinates > b.coordinates) return -1
+        if (b.coordinates > a.coordinates) return 1
     }
+    
+    northernLocations.sort(sortByCoordinates)
+    southernLocations.sort((a, b) => sortByCoordinates(b, a))
+    
+    return northernLocations.concat(southernLocations)
 }
 
-const updateCompassDirection = (compassElement, previousScrollPosition, currentScrollPosition) => {
-    compassElement.textContent = currentScrollPosition > previousScrollPosition ? "S" : "N"
+const extractCityName = (fullName) => {
+    return fullName.split(',')[0].toLowerCase().replaceAll(' ', '-')
 }
 
-const updateLocationIndicator = (locationIndicatorElement, destination) => {
-    locationIndicatorElement.href = `https://www.google.com/maps/place/${destination.coordinates}`
-    locationIndicatorElement.target = "_blank"
-    locationIndicatorElement.style.color = destination.color
-    locationIndicatorElement.textContent = `${destination.name}\n${destination.coordinates}`
+const createPositionDisplay = (initialLocation) => {
+    const display = document.createElement('a')
+    display.classList.add('location')
+    updatePositionDisplay(display, initialLocation)
+    return display
+}
+
+const updatePositionDisplay = (display, location) => {
+    display.textContent = `${location.name}\n${location.coordinates}`
+    display.href = `https://www.google.com/maps/place/${location.coordinates}`
+    display.target = "_blank"
+    display.style.color = location.color
+}
+
+const createDirectionIndicator = () => {
+    const indicator = document.createElement('div')
+    indicator.classList.add('direction')
+    return indicator
+}
+
+const updateDirectionIndicator = (indicator, currentScroll, previousScroll) => {
+    indicator.textContent = currentScroll > previousScroll ? "S" : "N"
+}
+
+const calculateCurrentIndex = () => {
+    return Math.round(window.scrollY / window.innerHeight)
 }
