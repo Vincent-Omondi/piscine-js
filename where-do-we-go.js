@@ -1,4 +1,4 @@
-import { places } from './data.js';
+import { places } from './where-do-we-go.data.js';
 
 export const renderExploration = () => {
     const sortedDestinations = sortDestinations()
