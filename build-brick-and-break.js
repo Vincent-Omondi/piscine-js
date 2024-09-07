@@ -1,40 +1,32 @@
 export const build = (numberOfBricks) => {
-    let brickCount = 0;
+    let currentBrickCount = 1;
+    let nextFoundationBrick = 2;
     const interval = setInterval(() => {
-        brickCount++;
-        const brick = document.createElement('div');
-        brick.id = `brick-${brickCount}`;
-        document.body.appendChild(brick)
-   
-        if (brickCount % 3 === 2) {
-            brick.dataset.foundation = 'true';
-        } else {
-            brick.dataset.foundation = 'false';
-        }
-
-        if (brickCount >= numberOfBricks) {
+        if (currentBrickCount > numberOfBricks) {
             clearInterval(interval);
+            return;
         }
+        const brick = document.createElement('div');
+        brick.id = `brick-${currentBrickCount}`;
+        if (currentBrickCount === nextFoundationBrick) {
+            brick.dataset.foundation = true;
+            nextFoundationBrick = currentBrickCount + 3;
+        }
+        document.body.appendChild(brick);
+        currentBrickCount++;
     }, 100);
 };
 
 export const repair = (...ids) => {
     ids.forEach(id => {
         const brick = document.getElementById(id);
-        if (brick){
-            if (brick.dataset.foundation === 'true') {
-                brick.dataset.repaired = 'inprogress';
-            } else {
-                brick.dataset.repaired = 'true';
-            }
+        if (brick) {
+            brick.dataset.repaired = brick.hasAttribute("data-foundation") ? "in progress" : "true";
         }
-
     });
-}
+};
 
 export const destroy = () => {
-    const bricks = document.querySelectorAll('div[id^="brick-"]');
-    if (bricks.length){
-        bricks[bricks.length - 1].remove();
-    }
+    const allDivs = document.getElementsByTagName('div');
+    allDivs[allDivs.length - 1]?.remove();
 };
