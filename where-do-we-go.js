@@ -1,33 +1,76 @@
 import { places } from './data.js';
 
-export function explore() {
-    places.forEach(location => {
-        const locationElement = createLocationElement(location);
-        document.body.appendChild(locationElement);
-    });
+export const renderExploration = () => {
+    const sortedDestinations = sortDestinations()
+    const bodyElement = document.body
 
-    console.log(formatImageName(places[2].name));
+    sortedDestinations.forEach(destination => {
+        const destinationSection = createDestinationSection(destination)
+        bodyElement.appendChild(destinationSection)
+    })
+
+    const currentLocationIndicator = createLocationIndicator(sortedDestinations[0])
+    bodyElement.appendChild(currentLocationIndicator)
+
+    const compassElement = createCompass()
+    bodyElement.appendChild(compassElement)
+    let previousScrollPosition = 0
+    let currentScrollPosition = 0
+
+    document.addEventListener("scroll", () => {
+        currentScrollPosition = window.scrollY;
+        updateCompassDirection(compassElement, previousScrollPosition, currentScrollPosition)
+        const currentDestinationIndex = Math.round(window.scrollY / window.innerHeight)
+        updateLocationIndicator(currentLocationIndicator, sortedDestinations[currentDestinationIndex])
+        previousScrollPosition = window.scrollY;
+    })
 }
 
-function createLocationElement(location) {
-    const sectionElement = document.createElement("section");
-    sectionElement.style.backgroundImage = `url(./images/${formatImageName(location.name)}.jpg)`;
-    sectionElement.style.backgroundSize = "100%";
-    sectionElement.className = "location";
-
-    const linkElement = createLinkElement(location);
-    sectionElement.appendChild(linkElement);
-
-    return sectionElement;
+const sortDestinations = () => {
+    const northboundDestinations = places.filter(destination => destination.coordinates.includes("N"))
+    const southboundDestinations = places.filter(destination => destination.coordinates.includes("S"))
+    northboundDestinations.sort((a, b) => compareCoordinates(a, b, "N"))
+    southboundDestinations.sort((a, b) => compareCoordinates(a, b, "S"))
+    return northboundDestinations.concat(southboundDestinations)
 }
 
-function createLinkElement(location) {
-    const linkElement = document.createElement('a');
-    linkElement.innerHTML = location.name + location.coordinates;
-    linkElement.style.color = location.color;
-    return linkElement;
+const createDestinationSection = (destination) => {
+    const sectionElement = document.createElement('section')
+    const cityName = destination.name.split(',')[0].toLowerCase().replaceAll(' ', '-')
+    sectionElement.style.background = `url('./where-do-we-go_images/${cityName}.jpg')`
+    return sectionElement
 }
 
-function formatImageName(name) {
-    return name.split(',')[0].toLowerCase().split(' ').join('-');
+const createLocationIndicator = (destination) => {
+    const locationIndicatorElement = document.createElement('a')
+    locationIndicatorElement.classList.add('location')
+    locationIndicatorElement.textContent = `${destination.name}\n${destination.coordinates}`
+    locationIndicatorElement.href = `https://www.google.com/maps/place/${destination.coordinates}`
+    locationIndicatorElement.style.color = destination.color
+    return locationIndicatorElement
+}
+
+const createCompass = () => {
+    const compassElement = document.createElement('div')
+    compassElement.classList.add('direction')
+    return compassElement
+}
+
+const compareCoordinates = (a, b, hemisphere) => {
+    if (hemisphere === "N") {
+        return a.coordinates > b.coordinates ? -1 : 1
+    } else {
+        return b.coordinates > a.coordinates ? -1 : 1
+    }
+}
+
+const updateCompassDirection = (compassElement, previousScrollPosition, currentScrollPosition) => {
+    compassElement.textContent = currentScrollPosition > previousScrollPosition ? "S" : "N"
+}
+
+const updateLocationIndicator = (locationIndicatorElement, destination) => {
+    locationIndicatorElement.href = `https://www.google.com/maps/place/${destination.coordinates}`
+    locationIndicatorElement.target = "_blank"
+    locationIndicatorElement.style.color = destination.color
+    locationIndicatorElement.textContent = `${destination.name}\n${destination.coordinates}`
 }
