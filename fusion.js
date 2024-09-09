@@ -2,7 +2,7 @@ const fusion = (obj1, obj2) => {
     const result = {};
 
     for (const key in obj1) {
-        if (Array.isArray(obj1[key])) {
+        if (Array.isArray(obj1[key]) && Array.isArray(obj2[key])) {
             result[key] = obj1[key].concat(obj2[key] || []);
         } else if (typeof obj1[key] ==='string' && typeof obj2[key] === 'string') {
             result[key] = obj1[key] +' ' + obj2[key];
@@ -26,3 +26,4 @@ const fusion = (obj1, obj2) => {
 
 
 // console.log(fusion({ a: "hello", b: [] }, { a: 4 }))
+console.log((fusion({ a: [1, 2] }, { a: 1 })))
