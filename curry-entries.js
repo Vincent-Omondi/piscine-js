@@ -5,8 +5,8 @@ const defaultCurry = (obj1) => (obj2) => {
 const mapCurry = (fn) => (obj) => { 
     const result = {};
     for (let [key, value] of Object.entries(obj)) {
-        const transformed = fn([key, value]);
-        Object.assign(result, transformed);
+        const transformed = fn([key, value]); 
+        result[transformed[0]] = transformed[1]; 
     }
     return result;
 }
@@ -39,15 +39,16 @@ const reduceScore = reduceCurry((acc, [key, value]) => {
 const filterForce = filterCurry(([k, v]) => v.isForceUser && v.shootingScore >= 80);
 
 const mapAverage = mapCurry(([k, v]) => {
-    return {
-        [k]: {
-           ...v,
+    return [
+        k,
+        {
+            ...v,
             averageScore: (v.pilotingScore + v.shootingScore) / 2
         }
-    };
+    ];
 });
 
-// // prettier-ignore
+// prettier-ignore
 // const personnel = {
 //     lukeSkywalker: { id: 5,  pilotingScore: 98, shootingScore: 56, isForceUser: true  },
 //     sabineWren:    { id: 82, pilotingScore: 73, shootingScore: 99, isForceUser: false },
@@ -56,7 +57,7 @@ const mapAverage = mapCurry(([k, v]) => {
 //     calebDume:     { id: 11, pilotingScore: 71, shootingScore: 85, isForceUser: true  },
 // }
 
-// const result = mapAverage(personnel)
+// const result = mapCurry(([k, v]) => [`${k}🤙🏼`, `${v}🤙🏼`])({ emoji: 'cool' })
 
 // console.log(result)
   

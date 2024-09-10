@@ -28,10 +28,10 @@ const reduceKeys = (obj, fn, initial = '') => {
 
 const nutrients = { carbohydrates: 12, protein: 20, fat: 5 }
 
-// console.log(filterKeys(nutrients, (key) => /protein/.test(key)))
-// output: { protein: 20 }
+console.log(filterKeys(nutrients, (key) => /protein/.test(key)))
+output: { protein: 20 }
 
-// console.log(mapKeys(nutrients, (k) => `-${k}`))
+console.log(mapKeys(nutrients, (k) => `-${k}`))
 // output: { -carbohydrates: 12, -protein: 20, -fat: 5 }
 
 
