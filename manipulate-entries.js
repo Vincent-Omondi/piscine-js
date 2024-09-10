@@ -26,12 +26,12 @@ const reduceEntries = (cart, reduceFn, initial) => {
 }
 
 const totalCalories = (cart) => {
-    return reduceEntries(cart, (acc, [key, grams]) => {
+    return Math.round(reduceEntries(cart, (acc, [key, grams]) => {
         if (nutritionDB[key]){
             return acc + (nutritionDB[key].calories * grams) / 100;
         }
         return acc;
-    }, 0);
+    }, 0) * 10)/10;
 }
 
 const lowCarbs = (cart) => {
