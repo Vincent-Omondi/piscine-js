@@ -6,6 +6,14 @@ const deepCopy = (value) => {
         return value.map(deepCopy);
     }
 
+    if (typeof value === 'function') {
+        return value.bind({});
+    }
+
+    if (value instanceof RegExp) {
+        return new RegExp(value.source, value.flags);
+    }
+
     const copy = {};
     for (const key in value) {
         if (value.hasOwnProperty(key)) {
