@@ -18,11 +18,9 @@ const mapKeys = (obj, fn) => {
 }
 
 const reduceKeys = (obj, fn) => {
-    let keys = Object.keys(obj)
-
-    let acc = keys[0]
+    let acc = ''
     for (let key in obj) {
-        acc = fn(acc, key)
+        acc = acc === '' ? key : fn(acc, key)
     }
     return acc
 }
