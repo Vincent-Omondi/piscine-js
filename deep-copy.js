@@ -1,18 +1,18 @@
 const deepCopy = (value) => {
-    if (typeof value === 'object' && value!== null) {
-        if (Array.isArray(value)) {
-            return value.map(deepCopy);
-        } else {
-            const copiedObj = {};
-            for (const key in value) {
-                copiedObj[key] = deepCopy(value[key]);
-            }
-            return copiedObj;
-        }
-    } else {
+    if (value === null || typeof value!== 'object') {
         return value;
     }
-    
+    if (Array.isArray(value)) {
+        return value.map(deepCopy);
+    }
+
+    const copy = {};
+    for (const key in value) {
+        if (value.hasOwnProperty(key)) {
+            copy[key] = deepCopy(value[key]);
+        }
+    }
+    return copy;
 }
 
 // // Example usage:
