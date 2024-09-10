@@ -50,12 +50,16 @@ const cartTotal = (cart) => {
         const nutrition = nutritionDB[key];
         const adjustedNutrition = {};
         for (let [nutrient, value] of Object.entries(nutrition)){
-            adjustedNutrition[nutrient] = (value * grams) / 100;
+            adjustedNutrition[nutrient] = roundTo((value * grams) / 100, 3);
         }
         return [key, adjustedNutrition];
     }
     return [key, {}]
  });
+}
+
+const roundTo = (value, decimals) => {
+    return Math.round(value * Math.pow(10, decimals)) / Math.pow(10, decimals);
 }
 
 
