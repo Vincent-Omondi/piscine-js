@@ -29,12 +29,12 @@ const filterCurry = (fn) => (obj) => {
 }
 
 
-const reduceScore = (attr) => reduceCurry((acc, [key, value]) => {
-    if(value.isForceUser) {
-        return acc + value[attr];
+const reduceScore = reduceCurry((acc, [key, value]) => {
+    if (value.isForceUser) {
+        return acc + value.pilotingScore + value.shootingScore;
     }
     return acc;
-})(personnel, 0);
+});
 
 
 const filterForce = filterCurry(([k, v]) => v.isForceUser && v.shootingScore >= 80);
@@ -48,3 +48,16 @@ const mapAverage = mapCurry(([k, v]) => {
     };
 });
 
+// prettier-ignore
+// const personnel = {
+//     lukeSkywalker: { id: 5,  pilotingScore: 98, shootingScore: 56, isForceUser: true  },
+//     sabineWren:    { id: 82, pilotingScore: 73, shootingScore: 99, isForceUser: false },
+//     zebOrellios:   { id: 22, pilotingScore: 20, shootingScore: 59, isForceUser: false },
+//     ezraBridger:   { id: 15, pilotingScore: 43, shootingScore: 67, isForceUser: true  },
+//     calebDume:     { id: 11, pilotingScore: 71, shootingScore: 85, isForceUser: true  },
+// }
+
+// const result = reduceScore(personnel, 0)
+
+// console.log(result)
+  
