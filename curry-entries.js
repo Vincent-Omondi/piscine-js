@@ -5,11 +5,10 @@ const defaultCurry = (obj1) => (obj2) => {
 const mapCurry = (fn) => (obj) => { 
     const result = {};
     for (let [key, value] of Object.entries(obj)) {
-        const [nwKey, nwValue] = fn([key, value]);
-        result[nwKey] = nwValue;
+        const transformed = fn([key, value]);
+        Object.assign(result, transformed);
     }
     return result;
-    
 }
 
 const reduceCurry = (fn) => (obj, initial) => {
@@ -48,7 +47,7 @@ const mapAverage = mapCurry(([k, v]) => {
     };
 });
 
-// prettier-ignore
+// // prettier-ignore
 // const personnel = {
 //     lukeSkywalker: { id: 5,  pilotingScore: 98, shootingScore: 56, isForceUser: true  },
 //     sabineWren:    { id: 82, pilotingScore: 73, shootingScore: 99, isForceUser: false },
@@ -57,7 +56,7 @@ const mapAverage = mapCurry(([k, v]) => {
 //     calebDume:     { id: 11, pilotingScore: 71, shootingScore: 85, isForceUser: true  },
 // }
 
-// const result = reduceScore(personnel, 0)
+// const result = mapAverage(personnel)
 
 // console.log(result)
   
