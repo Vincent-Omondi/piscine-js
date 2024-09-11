@@ -3,8 +3,8 @@ const pronoun = (str) => {
     const result = {};
   
     // Convert string to lowercase and split into words
-    const words = str.toLowerCase().split(/\s+/);
-  
+const words = str.toLowerCase().replace(/[^\w\s]|_/g, "").split(/\s+/);  
+
     words.forEach((word, index) => {
       if (pronouns.includes(word)) {
         if (!result[word]) {
