@@ -14,11 +14,11 @@ function opThrottle(func, wait, options = {}) {
     let previous = 0;
     let result;
 
-    return function (...args) {
+    return function throttled(...args) {
         const now = Date.now();
-        const remaining = wait - (now -previous);
+        const remaining = wait - (now - previous);
 
-        if (!previous && options.trailing !== false) {
+        if (!previous && options.leading === false) {
             previous = now;
         }
 
@@ -33,10 +33,10 @@ function opThrottle(func, wait, options = {}) {
             timeout = setTimeout(() => {
                 previous = options.leading === false ? 0 : Date.now();
                 timeout = null;
-                func.apply(this, args);
                 result = func.apply(this, args);
             }, remaining);
         }
+
         return result;
     };
 }
