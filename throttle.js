@@ -12,6 +12,7 @@ const throttle = (func, wait) => {
 function opThrottle(func, wait, options = {}) {
     let timeout = null;
     let previous = 0;
+    let result;
 
     return function (...args) {
         const now = Date.now();
@@ -35,7 +36,8 @@ function opThrottle(func, wait, options = {}) {
                 func.apply(this, args);
             }, remaining);
         }
-    }
+        return result;
+    };
 }
 
 
