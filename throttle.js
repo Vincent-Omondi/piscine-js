@@ -17,7 +17,7 @@ function opThrottle(func, wait, options = {}) {
         const now = Date.now();
         const remaining = wait - (now -previous);
 
-        if (!previous && PushSubscriptionOptions.leading === false) {
+        if (!previous && options.trailing !== false) {
             previous = now;
         }
 
