@@ -14,7 +14,6 @@ function opThrottle(func, wait, options = {}) {
     let previous = 0;
     let result;
     let lastArgs;
-    let lastCallTime;
 
     return function throttled(...args) {
         const now = Date.now();
@@ -32,31 +31,15 @@ function opThrottle(func, wait, options = {}) {
                 timeout = null;
             }
             previous = now;
-            lastCallTime = now;
             result = func.apply(this, lastArgs);
         } else if (!timeout && options.trailing !== false) {
             timeout = setTimeout(() => {
                 previous = options.leading === false ? 0 : Date.now();
                 timeout = null;
-                lastCallTime = previous;
                 result = func.apply(this, lastArgs);
             }, remaining);
-        }
-
-        // Handle trailing calls
-        if (options.trailing && now - lastCallTime >= wait) {
-            previous = now;
-            lastCallTime = now;
-            result = func.apply(this, lastArgs);
         }
 
         return result;
     };
 }
-
-// const throttleDisplay = throttle(() => console.log("Hi"), 6000);
-
-// for(let i=1; i<=10; i++) {
-//     setTimeout(throttleDisplay, i*1000);
-// }
-
