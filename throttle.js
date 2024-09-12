@@ -28,12 +28,13 @@ function opThrottle(func, wait, options = {}) {
                 timeout = null;
             }
             previous = now;
-            func.apply(this, args);
+            result = func.apply(this, args);
         } else if (!timeout && options.trailing !== false) {
             timeout = setTimeout(() => {
                 previous = options.leading === false ? 0 : Date.now();
                 timeout = null;
                 func.apply(this, args);
+                result = func.apply(this, args);
             }, remaining);
         }
         return result;
