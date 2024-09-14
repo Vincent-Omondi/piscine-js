@@ -35,10 +35,10 @@ async function gougleSearch(q) {
         const videoQuery = queryServers('video', q);
 
         // Run all queries concurrently with a timeout of 80ms
-        const results = await withTimeout(
+        const results = await Promise.race([
             Promise.all([webQuery, imageQuery, videoQuery]),
-            80
-        );
+            new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 80))
+        ]);
 
         // Return the results in an object with server names as keys
         return {
