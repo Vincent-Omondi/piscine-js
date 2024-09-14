@@ -24,20 +24,8 @@ async function getJSON(path, params = {}) {
 }
 
 
-// Example 1: Fetching a single post
-console.log("Fetching a single post:");
-getJSON('https://jsonplaceholder.typicode.com/posts/1')
-  .then(data => console.log(data))
-  .catch(error => console.error('Error:', error.message));
+// console.log("Fetching a single post:");
+// getJSON('https://jsonplaceholder.typicode.com/posts/1')
+//   .then(data => console.log(data))
+//   .catch(error => console.error('Error:', error.message));
 
-// Example 2: Fetching posts with query parameters
-console.log("\nFetching posts with query parameters:");
-getJSON('https://jsonplaceholder.typicode.com/posts', { userId: 1 })
-  .then(data => console.log(data))
-  .catch(error => console.error('Error:', error.message));
-
-// Example 3: Trying to fetch a non-existent resource
-console.log("\nTrying to fetch a non-existent resource:");
-getJSON('https://jsonplaceholder.typicode.com/nonexistent')
-  .then(data => console.log(data))
-  .catch(error => console.error('Error:', error.message));
