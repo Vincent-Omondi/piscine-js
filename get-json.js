@@ -1,31 +1,18 @@
-async function getJSON(path, params = {}) {
-  const url = new URL(path);
-  Object.entries(params).forEach(([key, value]) => {
-    url.searchParams.append(key, value);
-  });
-
-  try {
+async function getJSON(path = '', params = {}) {
+    const queryString = new URLSearchParams(params).toString().replace(/%20/g, '+');
+    const url = `${path}?${queryString}`;
+    
     const response = await fetch(url);
 
     if (!response.ok) {
-      throw new Error(response.statusText);
+        throw new Error(response.statusText);
     }
 
-    const jsonData = await response.json();
+    const res = await response.json();
 
-    if (jsonData.error) {
-      throw new Error(jsonData.error);
+    if (res.error) {
+        throw new Error(res.error);
     }
 
-    return jsonData.data;
-  } catch (error) {
-    throw error;
-  }
+    return res.data;
 }
-
-
-// console.log("Fetching a single post:");
-// getJSON('https://jsonplaceholder.typicode.com/posts/1')
-//   .then(data => console.log(data))
-//   .catch(error => console.error('Error:', error.message));
-
