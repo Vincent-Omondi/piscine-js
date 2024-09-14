@@ -1,24 +1,27 @@
-function interpolation({ step, start, end, callback, duration }) {
-    const stepSize = (end - start) / step;
+function interpolation({
+    step = 0,
+    start = 0,
+    end = 0,
+    callback = () => {},
+    duration = 0,
+} = {}) {
+    const deltaValue = (end - start) / step;
     const timeInterval = duration / step;
-  
-    let completedSteps = 0;
-  
-    function executeStep() {
-      if (completedSteps < step) {
-        const currentPoint = start + completedSteps * stepSize;
-        const currentTime = completedSteps * timeInterval;
-  
-        callback([currentPoint, currentTime]);
-        completedSteps++;
-  
-        if (completedSteps < step) {
-          setTimeout(executeStep, timeInterval);
+
+    let currentValue = start;
+    let currentStep = 0;
+
+    const interpolationTimer = setInterval(() => {
+        if (currentStep < step) {
+            const currentTime = timeInterval * (currentStep + 1);
+            callback([currentValue, currentTime]);
+            
+            currentValue += deltaValue;
+            currentStep++;
+        } else {
+            clearInterval(interpolationTimer);
         }
-      }
-    }
-  
-    executeStep();
+    }, timeInterval);
 }
 
 // console.log("Starting interpolation...");
