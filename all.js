@@ -3,7 +3,7 @@ const all = async (objs = {}) => {
 
   const entries = Object.entries(objs);
   const resolvedEntries = await Promise.all(
-    entries.map(async ([key, value]) => [key, await value])
+    entries.map(async ([key, value]) => [key, await Promise.resolve(value)])
   );
 
   return Object.fromEntries(resolvedEntries);
