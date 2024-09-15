@@ -12,25 +12,23 @@ async function race(promises = []) {
 
 async function some(promises, count) {
     if (promises.length === 0 || count === 0) {
-        return Promise.resolve([]); // Return empty array for empty input
+        return Promise.resolve([]); // Return empty array for empty input or count 0
     }
 
     return new Promise((resolve, reject) => {
-        const results = [];
+        let results = new Array(promises.length); // Array to store results and preserve order
         let remaining = count;
+        let resolvedCount = 0; // Keep track of how many promises resolved
 
-        promises.forEach(promise => {
+        promises.forEach((promise, index) => {
             Promise.resolve(promise).then(result => {
-                results.push(result);
-                remaining--;
-
-                if (remaining === 0) {
-                    if (results[1] === undefined && results.length > 1) {
-                        results = [results[1], results[0]];
-                    }
-                    resolve(results);
+                results[index] = result;
+                resolvedCount++;
+                if (resolvedCount === count) {
+                    resolve(results.filter((_, i) => results[i] !== undefined)); // Filter out unneeded undefined slots
                 }
             }).catch(reject);
         });
     });
 }
+
