@@ -1,10 +1,10 @@
-const all = async (objs = {}) => {
-  if (Object.keys(objs).length === 0) return {};
+async function all(objs = {}) {
+    if (!Object.keys(objs).length) return {};
 
-  const entries = Object.entries(objs);
-  const resolvedEntries = await Promise.all(
-    entries.map(async ([key, value]) => [key, await Promise.resolve(value)])
-  );
+    const res = {};
+    for (const key of Object.keys(objs)) {
+        res[key] = await objs[key];
+    }
 
-  return Object.fromEntries(resolvedEntries);
+    return res;
 };
