@@ -1,50 +1,39 @@
-import { readdir, readFile } from 'fs/promises';
-import { resolve } from 'path';
+import fs from 'fs/promises';
+import path from 'path';
 
-async function listGuests(directory) {
+async function tellMeWho(directoryPath) {
   try {
-    const dirPath = resolve(directory);
-    const files = await readdir(dirPath);
-    const fileReadPromises = files.map(file => readFile(resolve(dirPath, file), 'utf-8').catch(err => null));
-    const fileContents = await Promise.all(fileReadPromises);
+    // Read all files in the directory
+    const files = await fs.readdir(directoryPath);
 
-    const names = fileContents
-      .filter(content => content !== null)  
-      .map(content => content.trim())  
-      .flatMap(content => content.split('\n')) 
-      .map(line => line.trim())  
-      .filter(line => line.length > 0);  
+    // Process each file and extract guest names
+    const guestPromises = files.map(async (file) => {
+      const filePath = path.join(directoryPath, file);
+      const content = await fs.readFile(filePath, 'utf-8');
+      const [lastName, firstName] = content.trim().split(', ');
+      return `${lastName} ${firstName}`;
+    });
 
-    if (names.length === 0) {
-      console.log('No names found.'); // Debugging statement
-    } else {
-      names.sort((a, b) => {
-        const [aLast, aFirst] = a.split(' ');
-        const [bLast, bFirst] = b.split(' ');
+    // Wait for all promises to resolve
+    const guests = await Promise.all(guestPromises);
 
-        if (aLast === undefined || aFirst === undefined) return 1; // Handle undefined cases
-        if (bLast === undefined || bFirst === undefined) return -1; // Handle undefined cases
+    // Sort guests alphabetically
+    guests.sort((a, b) => a.localeCompare(b));
 
-        return aLast.localeCompare(bLast) || aFirst.localeCompare(bFirst);
-      });
-
-      names.forEach((name, index) => {
-        const [lastname, firstname] = name.split(' ');
-        
-        if (lastname === undefined || firstname === undefined) {
-          console.log(`${index + 1}. Invalid format: ${name}`);
-        } else {
-          console.log(`${index + 1}. ${lastname} ${firstname}`);
-        }
-      });
-    }
-
+    // Print formatted guest list
+    guests.forEach((guest, index) => {
+      console.log(`${index + 1}. ${guest}`);
+    });
   } catch (error) {
-    console.error('Error processing the directory:', error.message);
+    console.error('Error:', error.message);
   }
 }
 
-const args = process.argv.slice(2);
-const directory = args[0] || '.';
+// Get the directory path from command line arguments
+const directoryPath = process.argv[2];
 
-listGuests(directory);
+if (!directoryPath) {
+  console.error('Please provide a directory path as an argument.');
+} else {
+  tellMeWho(directoryPath);
+}
