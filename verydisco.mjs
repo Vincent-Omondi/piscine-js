@@ -12,7 +12,6 @@ if (!input) {
     process.exit(1);
 }
 
-// const veryDiscoResult = input.split(' ').map(makeVeryDisco).join(' ');
-const veryDiscoResult = makeVeryDisco(input)
+const veryDiscoResult = input.split(' ').map(makeVeryDisco).join(' ');
 
 console.log(veryDiscoResult)
