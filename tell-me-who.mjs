@@ -9,8 +9,6 @@ async function tellMeWho(directoryPath) {
     // Process each file and extract guest names
     const guests = await Promise.all(
       files.map(async (file) => {
-        const filePath = path.join(directoryPath, file);
-        const content = await fs.readFile(filePath, 'utf-8');
         const [lastName, firstName] = file.replace('.json', '').split('_');
         return { lastName, firstName };
       })
@@ -18,14 +16,17 @@ async function tellMeWho(directoryPath) {
 
     // Sort guests alphabetically by last name, then first name
     guests.sort((a, b) => {
-      if (a.lastName === b.lastName) {
+      const lastNameComparison = a.lastName.localeCompare(b.lastName);
+      if (lastNameComparison === 0) {
         return a.firstName.localeCompare(b.firstName);
       }
-      return a.lastName.localeCompare(b.lastName);
+      return lastNameComparison;
     });
 
-    // Print formatted guest list
-    return guests.map((guest, index) => `${index + 1}. ${guest.lastName} ${guest.firstName}`);
+    // Format and return guest list
+    return guests.map((guest, index) => 
+      `${index + 1}. ${guest.lastName} ${guest.firstName}`
+    );
   } catch (error) {
     console.error('Error:', error.message);
     return [];
