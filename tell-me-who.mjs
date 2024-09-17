@@ -10,26 +10,31 @@ async function tellMeWho(directoryPath) {
     const guestPromises = files.map(async (file) => {
       const filePath = path.join(directoryPath, file);
       const content = await fs.readFile(filePath, 'utf-8');
-      const [lastName, firstName] = content.trim().split(', ');
-      return `${lastName} ${firstName}`;
+      const [lastName, firstName] = file.replace('.json', '').split('_');
+      return { lastName, firstName };
     });
 
     // Wait for all promises to resolve
     const guests = await Promise.all(guestPromises);
 
-    // Sort guests alphabetically
-    guests.sort((a, b) => a.localeCompare(b));
+    // Sort guests alphabetically by last name, then first name
+    guests.sort((a, b) => {
+      const lastNameComparison = a.lastName.localeCompare(b.lastName);
+      if (lastNameComparison === 0) {
+        return a.firstName.localeCompare(b.firstName);
+      }
+      return lastNameComparison;
+    });
 
     // Print formatted guest list
     guests.forEach((guest, index) => {
-      console.log(`${index + 1}. ${guest}`);
+      console.log(`${index + 1}. ${guest.lastName} ${guest.firstName}`);
     });
   } catch (error) {
     console.error('Error:', error.message);
   }
 }
 
-// Get the directory path from command line arguments
 const directoryPath = process.argv[2];
 
 if (!directoryPath) {
