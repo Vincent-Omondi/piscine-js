@@ -3,7 +3,7 @@
 import { readFileSync } from "fs";
 
 function reverseVeryDisco(word) {
-    const midpoint = Math.floor(word.length / 2);
+    const midpoint = Math.ceil(word.length / 2);
     return word.slice(-midpoint) + word.slice(0, -midpoint);
 }
 
