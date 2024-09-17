@@ -5,13 +5,14 @@ function makeVeryDisco(word) {
     return word.slice(midpoint) + word.slice(0, midpoint)
 }
 
-const input = process.argv.slice(2).join(' ');
+const input = process.argv[2];
 
 if (!input) {
     console.error('Please provide a word as an argument.');
     process.exit(1);
 }
 
-const veryDiscoResult = input.split(' ').map(makeVeryDisco).join(' ');
+// const veryDiscoResult = input.split(' ').map(makeVeryDisco).join(' ');
+const veryDiscoResult = makeVeryDisco(input)
 
 console.log(veryDiscoResult)
