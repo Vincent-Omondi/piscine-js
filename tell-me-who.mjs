@@ -7,12 +7,12 @@ async function tellMeWho(directoryPath) {
     const files = await fs.readdir(directoryPath);
 
     // Process each file and extract guest names
-    const guests = await Promise.all(
-      files.map(async (file) => {
-        const [lastName, firstName] = file.replace('.json', '').split('_');
-        return { lastName, firstName };
-      })
-    );
+    const guests = files
+      .filter(file => file.endsWith('.json'))
+      .map(file => {
+        const [firstName, lastName] = file.replace('.json', '').split('_');
+        return { firstName, lastName };
+      });
 
     // Sort guests alphabetically by last name, then first name
     guests.sort((a, b) => {
