@@ -1,55 +1,49 @@
-import http from 'http';
-import fs from 'fs/promises';
-import path from 'path';
+import { createServer } from 'node:http';
+import { writeFile } from 'node:fs/promises';
+import path from 'node:path';
 
 const PORT = 5000;
-const GUESTS_DIRECTORY = './guests'; // Adjust this path if needed
+const GUESTS_DIR = 'guests';
 
-const server = http.createServer(async (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
+const handlePostRequest = async (request, response) => {
+    const url = new URL(request.url, `http://${request.headers.host}`);
+    const guestName = url.pathname.slice(1);
 
-  const guestName = path.basename(req.url);
-  const filePath = path.join(GUESTS_DIRECTORY, `${guestName}.json`);
-
-  if (req.method === 'GET') {
     try {
-      const data = await fs.readFile(filePath, 'utf8');
-      res.statusCode = 200;
-      res.end(data);
+        const body = await getRequestBody(request);
+        const filePath = path.join(GUESTS_DIR, `${guestName}.json`);
+        
+        await writeFile(filePath, body);
+        
+        sendJsonResponse(response, 201, JSON.parse(body));
     } catch (error) {
-      if (error.code === 'ENOENT') {
-        res.statusCode = 404;
-        res.end(JSON.stringify({ error: 'guest not found' }));
-      } else {
-        console.error('Server error:', error);
-        res.statusCode = 500;
-        res.end(JSON.stringify({ error: 'server failed' }));
-      }
+        console.error('Error handling POST request:', error);
+        sendJsonResponse(response, 500, { error: "server failed" });
     }
-  } else if (req.method === 'POST') {
-    let body = '';
-    req.on('data', chunk => {
-      body += chunk.toString();
-    });
+};
 
-    req.on('end', async () => {
-      try {
-        const guestData = JSON.parse(body);
-        await fs.writeFile(filePath, JSON.stringify(guestData, null, 2));
-        res.statusCode = 201;
-        res.end(JSON.stringify(guestData));
-      } catch (error) {
-        console.error('Server error:', error);
-        res.statusCode = 500;
-        res.end(JSON.stringify({ error: 'server failed' }));
-      }
+const getRequestBody = (request) => {
+    return new Promise((resolve, reject) => {
+        let body = '';
+        request.on('data', chunk => body += chunk);
+        request.on('end', () => resolve(body));
+        request.on('error', reject);
     });
-  } else {
-    res.statusCode = 404;
-    res.end(JSON.stringify({ error: 'not found' }));
-  }
+};
+
+const sendJsonResponse = (response, statusCode, data) => {
+    response.writeHead(statusCode, { 'Content-Type': 'application/json' });
+    response.end(JSON.stringify(data));
+};
+
+const server = createServer((request, response) => {
+    if (request.method === 'POST') {
+        handlePostRequest(request, response);
+    } else {
+        sendJsonResponse(response, 405, { error: "wrong method" });
+    }
 });
 
 server.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+    console.log(`Server started on localhost:${PORT}!`);
 });
