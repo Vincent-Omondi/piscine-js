@@ -79,19 +79,25 @@ async function main() {
           break;
         }
         const list = await loadList(filePath);
-        if (!list[elem]) break;
-
+        if (!list[elem]) list[elem] = 0;
+      
         if (quantity === null) {
+          // If no quantity is specified, remove the item
           delete list[elem];
         } else if (isNaN(quantity)) {
+          // If the quantity is NaN, print error and do nothing
           console.error('Unexpected request: nothing has been removed.');
+        } else if (quantity < 0) {
+          // If the quantity is negative, treat it as an add command
+          list[elem] -= quantity; // Subtracting a negative is the same as adding
         } else {
+          // If a positive quantity is specified, subtract it
           list[elem] -= quantity;
           if (list[elem] <= 0) {
-            delete list[elem];
+            delete list[elem]; // Remove the entry if the value is <= 0
           }
         }
-
+      
         await saveList(filePath, list);
         console.log(`Removed/reduced element: ${elem}`);
         break;
