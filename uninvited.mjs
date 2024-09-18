@@ -1,41 +1,39 @@
 import { createServer } from 'node:http';
 import { writeFile } from 'node:fs';
-const PORT = 5000;
+const port = 5000
 
-const handleRequest = (request, response) => {
+const server = createServer((request, response) => {
     const url = new URL(request.url, `http://${request.headers.host}`);
-    const guestName = url.pathname.substring(1);
+    const guestName = url.pathname.slice(1);
     response.setHeader('Content-Type', 'application/json');
-
-    if (request.method !== 'POST') {
-        response.statusCode = 405;
-        return response.end(JSON.stringify({ error: "Method Not Allowed" }));
-    }
-
-    let body = '';
-    request.on('data', chunk => body += chunk);
-    
-    request.on('end', () => {
-        writeFile(`guests/${guestName}.json`, body, (err) => {
-            if (err) {
-                console.error('File write error:', err);
-                response.statusCode = 500;
-                return response.end(JSON.stringify({ error: "Internal Server Error" }));
+    if (request.method === 'POST') {
+        let body = '';
+        request.on('data', chunk => body += chunk);
+        request.on('end', () => {
+            try {
+                const jsonContent = body;
+                writeFile(`guests/${guestName}.json`, jsonContent, (err) => {
+                    if (err) {
+                        console.error('Error writing file:', err);
+                        response.statusCode = 500;
+                        response.end(JSON.stringify({ error: "server failed" }));
+                    } else {
+                        response.statusCode = 201;
+                        response.end(jsonContent);
+                    }
+                });
+            } catch (error) {
+                console.error('Error parsing JSON:', error);
+                response.statusCode = 400;
+                response.end(JSON.stringify({ error: "Invalid JSON" }));
             }
-
-            response.statusCode = 201;
-            response.end(body);
         });
-    });
+    } else {
+        response.statusCode = 405;
+        response.end(JSON.stringify({ error: "wrong method" }));
+    }
+});
 
-    request.on('error', () => {
-        response.statusCode = 400;
-        response.end(JSON.stringify({ error: "Bad Request" }));
-    });
-};
-
-const server = createServer(handleRequest);
-
-server.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
+server.listen(port, () => {
+    console.log(`Server started on localhost:${port}!`);
 });
