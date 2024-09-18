@@ -15,7 +15,7 @@ const handlePostRequest = async (request, response) => {
         
         await writeFile(filePath, body);
         
-        sendJsonResponse(response, 201, JSON.parse(body));
+        sendJsonResponse(response, 201, body);
     } catch (error) {
         console.error('Error handling POST request:', error);
         sendJsonResponse(response, 500, { error: "server failed" });
@@ -33,7 +33,7 @@ const getRequestBody = (request) => {
 
 const sendJsonResponse = (response, statusCode, data) => {
     response.writeHead(statusCode, { 'Content-Type': 'application/json' });
-    response.end(JSON.stringify(data));
+    response.end(typeof data === 'string' ? data : JSON.stringify(data));
 };
 
 const server = createServer((request, response) => {
